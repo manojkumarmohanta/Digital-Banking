@@ -56,11 +56,40 @@ The software provides Separate security levels for the staff and the administrat
    cd backend
    mvn spring-boot:run
 
+4. Application Configuration
+
+   Configuring the Database
+
+   The `application.yml` file can be used to configure the database connection. to configure MySQL:
+
+   ```yaml
+   server:
+     port: 1221
+     servlet:
+       context-path: "/banking"
+   spring:
+     datasource:
+       url: jdbc:mysql://localhost/digital_banking_db
+       username: [your username]
+       password: [ your password]
+     mail:
+       host: smtp.gmail.com
+       port: 587
+       username: [Your Email]
+       password: [Email Password]
+       properties:
+         mail:
+           smtp:
+             auth: true
+             starttls:
+               enable: true
+
+
 4. Access the applications:
    
    ```sh
    Frontend: http://localhost:4200
-   Backend (API): http://localhost:8080
+   Backend (API): http://localhost:1221/banking
 
 ## Usage
 - Register a new account or log in with existing credentials.
