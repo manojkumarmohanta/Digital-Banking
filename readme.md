@@ -11,3 +11,59 @@ The software provides Separate security levels for the staff and the administrat
 - Spring boot 3.2
 - Angular 17
 - MySQL
+
+## Features
+
+- **User Authentication**: Users can sign up and log in to their accounts securely.
+- **Account Management**: Users can view their account details, including balance and transaction history.
+- **Fund Transfers**: Users can transfer funds between their accounts or to other users.
+- **Transaction History**: Users can view their transaction history and filter transactions by date or type.
+- **Mail Notifications**: Users receive email notifications for important account activities, such as fund transfers and account updates.
+
+## Technologies Used
+
+- **Frontend**: Angular 17, TypeScript, HTML/CSS
+- **Backend**: Spring Boot, Java
+- **Database**: MySQL
+- **Security**: Spring Security, JWT Authentication
+- **API Documentation**: Swagger
+
+## Setup
+
+### Prerequisites
+
+- Node.js and npm installed for Angular development
+- Java and Maven installed for Spring Boot development
+- MySQL installed for database storage
+
+### Installation
+
+1. Clone the repository:
+
+   ```sh
+   git clone https://github.com/your/repository.git
+   cd repository
+2. Frontend setup (Angular)
+
+   ```sh
+   cd frontend
+   npm install
+   npm start
+
+3. Backend setup (Spring boot)
+
+   ```sh
+   cd backend
+   mvn spring-boot:run
+
+4. Access the applications:
+   
+   ```sh
+   Frontend: http://localhost:4200
+   Backend (API): http://localhost:8080
+
+## Usage
+- Register a new account or log in with existing credentials.
+- Explore the dashboard to view account details and transaction history.
+- Use the fund transfer feature to transfer money between accounts.
+- Check your email for notifications on successful transactions and account updates.
