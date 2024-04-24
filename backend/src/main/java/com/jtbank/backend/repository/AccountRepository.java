@@ -22,13 +22,13 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
             " a.accountNumber = :accountNumber")
     @Modifying
     @Transactional
-    int addBalance(@PathParam("accountNumber") long accountNumber, @PathParam("balance") double balance);
+    void addBalance(@PathParam("accountNumber") long accountNumber, @PathParam("balance") double balance);
 
     @Query("UPDATE Account a SET a.accountBalance = a.accountBalance - :balance WHERE" +
             " a.accountNumber = :accountNumber")
     @Modifying
     @Transactional
-    int deductBalance(@PathParam("accountNumber") long accountNumber, @PathParam("balance") double balance);
+    void deductBalance(@PathParam("accountNumber") long accountNumber, @PathParam("balance") double balance);
 
     boolean existsByAccountNumber(long accountNumber);
 }

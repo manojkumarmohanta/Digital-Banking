@@ -1,0 +1,154 @@
+main {
+    min-height: 100dvh;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+        "aside header"
+        "aside section";
+}
+
+app-header {
+    grid-area: header;
+}
+
+app-sidebar {
+    grid-area: aside;
+}
+
+section {
+    grid-area: section;
+    margin: 1rem;
+    grid-template-columns: 300px 1fr;
+    grid-template-rows: 550px;
+    gap: 1rem;
+}
+
+section>div {
+    background-color: var(--primary-white);
+    box-shadow: 5px 5px 5px var(--primary-shadow);
+    border-radius: 1rem;
+}
+
+.form-container {
+    padding: 1rem;
+    
+}
+
+.form-container input,
+select {
+    outline: none;
+    width: 100%;
+    font-size: medium;
+    border: 1px solid var(--secondary-sky);
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.2rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 600;
+    resize: none;
+    background-color: var(--primary-aliceblue);
+}
+
+label {
+    margin-block: 1rem;
+}
+
+.form-container h1 {
+    text-align: center;
+    margin-block: 0.5rem;
+    color: black;
+}
+
+.form-container h2 {
+    margin-top: 1.5rem;
+    text-align: center;
+    background-color: rgb(96, 94, 165);
+    color: var(--primary-white);
+}
+
+.personal-details {
+    margin-top: 1%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1%;
+}
+
+.occupation-details {
+    margin-top: 1%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1%;
+}
+
+.address-details {
+    margin-top: 1%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1%;
+}
+
+.loan-details {
+    margin-top: 1%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1%;
+}
+
+.button-group {
+    padding-block: 1rem;
+    text-align: center;
+}
+
+.button-group button:hover {
+    transform: scale(1.05);
+    background-color: var(--primary-green);
+  }
+
+.button-group button {
+    display: inline-block;
+    outline: 0;
+    border: 0;
+    padding: 0.5rem 2rem;
+    background-color: var(--primary-purple);
+    color: var(--primary-white);
+    cursor: pointer;
+    text-transform: uppercase;
+    font-size: large;
+    font-family: "Madimi One", sans-serif;
+    border-radius: 0.5rem;
+    box-shadow: 5px 5px 5px var(--primary-shadow);
+}
+
+app-modal input {
+    display: block;
+    outline: none;
+    width: 100%;
+    font-size: medium;
+    border: 1px solid var(--secondary-sky);
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.2rem;
+    font-family: "Madimi One", sans-serif;
+}
+
+app-modal .button-group {
+    padding-block: 0.5rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+app-modal .button-group button {
+    border: none;
+    background-color: var(--secondary-purple);
+    box-shadow: 5px 5px 5px var(--primary-shadow);
+    color: var(--primary-white);
+    cursor: pointer;
+    text-transform: uppercase;
+    padding: 0.3rem 1.5rem;
+    border-radius: 0.5rem;
+    font-size: small;
+}

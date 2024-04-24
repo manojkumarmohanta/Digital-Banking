@@ -45,5 +45,28 @@ aside a, button {
 
 aside a:hover, button:hover,
 .active {
-    background-color: var(--secondary-purple) !important;
+    background-color: var(--primary-dark) !important;
 }
+
+app-modal .button-group {
+    padding-block: 0.5rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+app-modal .button-group button {
+    border: none;
+    background-color: var(--secondary-purple);
+    box-shadow: 5px 5px 5px var(--primary-shadow);
+    color: var(--primary-white);
+    cursor: pointer;
+    text-transform: uppercase;
+    padding: 0.3rem 1.5rem;
+    border-radius: 0.5rem;
+    font-size: small;
+}
+
+app-modal .button-group button:hover{
+    transform: scale(1.05);
+  }

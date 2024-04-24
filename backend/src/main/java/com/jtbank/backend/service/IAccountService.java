@@ -4,6 +4,7 @@ import com.jtbank.backend.model.Account;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 public interface IAccountService {
@@ -25,7 +26,7 @@ public interface IAccountService {
 
     void withdrawalBalance(long accountNumber, double balance);
 
-    void transfer(long sender, long receiver, double balance);
+    void transfer(long sender, long receiver, double balance) throws UnsupportedEncodingException;
 
     Account deleteAccount(long accountNumber);
 

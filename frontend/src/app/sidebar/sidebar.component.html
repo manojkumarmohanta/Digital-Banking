@@ -37,6 +37,14 @@
         </li>
         <li>
           <a
+            routerLink="/loan"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            ><i class="fas fa-hand-holding-usd"></i> Loan</a
+          >
+        </li>
+        <li>
+          <a
             routerLink="/profile"
             routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: true }"
@@ -44,11 +52,23 @@
           >
         </li>
         <li>
-          <button (click)="onLogout()">
-            <i class="fas fa-right-from-bracket"></i> Logout
-          </button>
+          <button type="button" (click)="modalVisible = !modalVisible">
+          <i class="fas fa-right-from-bracket"></i> Logout
+        </button>
         </li>
       </ul>
     </nav>
   </aside>
-  
+
+  @if (modalVisible) {
+    <app-modal [header]="'Are you really want to Log out?'">
+        <form method="post" #logoutForm="ngForm" (ngSubmit)="onLogout()">
+            <div class="button-group">
+                <button type="submit">YES</button>
+                <button type="button" (click)="modalVisible = !modalVisible">
+                    NO
+                </button>
+            </div>
+        </form>
+    </app-modal>
+}

@@ -6,6 +6,7 @@ import { DepositComponent } from './deposit/deposit.component';
 import { WithdrawalComponent } from './withdrawal/withdrawal.component';
 import { TransferComponent } from './transfer/transfer.component';
 import { ProfileComponent } from './profile/profile.component';
+import { LoanComponent } from './loan/loan.component';
 
 export const routes: Routes = [
     { path: "signin", component: SigninComponent },
@@ -15,6 +16,7 @@ export const routes: Routes = [
     { path: "withdrawal", component: WithdrawalComponent },
     { path: "transfer", component: TransferComponent },
     { path: "profile", component: ProfileComponent },
+    { path: "loan", component: LoanComponent },
     { path: "", pathMatch: "full", redirectTo: "signin" },
     { path: "**", redirectTo: "signin" },
 ];

@@ -1,5 +1,5 @@
 server:
-  port: 1200
+  port: 1221
   servlet:
     context-path: "/banking"
 
@@ -14,7 +14,17 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: digitalbanking.mcaproject@gmail.com
+    password: hkrkjsbznxfsscli
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 upload:
   file:
     name: "profile-pictures/"

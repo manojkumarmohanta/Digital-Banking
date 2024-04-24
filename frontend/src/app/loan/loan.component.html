@@ -1,0 +1,156 @@
+<main>
+  <app-header></app-header>
+  <app-sidebar></app-sidebar>
+  <section>
+    <div class="form-container">
+      <form #loanForm="ngForm" (submit)="onLoanSubmit(loanForm)">
+        <h1>Loan Application Form</h1>
+        <hr />
+        <h2>Personal Information:</h2>
+        <div class="personal-details">
+          <div class="form-group">
+            <label for="name">Full Name</label>
+            <input type="text" name="accountHolderName" required />
+          </div>
+          <div class="form-group">
+            <label for="name">Email</label>
+            <input type="email" name="email" required />
+          </div>
+          <div class="form-group">
+            <label for="name">Mobile number</label>
+            <input type="tel" name="contactNumber" pattern="[0-9]{10}" required />
+          </div>
+          <div class="form-group">
+            <label for="name">Date of Birth</label>
+            <input type="date" name="dob" required />
+          </div>
+          <div>
+            <div class="form-group">
+              <label>Gender:</label>
+              <select id="marital_status" name="marital_status" required>
+                <option value="">Select Your Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="others">Others</option>\
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="name">Marital Status</label>
+            <select id="marital_status" name="marital_status" required>
+              <option value="">Select Marital Status</option>
+              <option value="single">Single</option>
+              <option value="married">Married</option>
+              <option value="divorced">Divorced</option>
+              <option value="widowed">Widowed</option>
+            </select>
+          </div>
+        </div>
+        <h2>Address Details:</h2>
+        <hr>
+        <div class="address-details">
+          <div class="form-group">
+            <label for="name">City</label>
+            <input type="text" name="city" required />
+          </div>
+          <div class="form-group">
+            <label for="name">State</label>
+            <input type="text" name="state" required />
+          </div>
+          <div class="form-group">
+            <label for="name">Country</label>
+            <input type="text" name="country" required />
+          </div>
+          <div class="form-group">
+            <label for="name">Pin code</label>
+            <input type="text" name="zipcode" required />
+          </div>
+        </div>
+        <h2>Occupation:</h2>
+        <hr>
+        <div class="occupation-details">
+          <div class="form-group">
+            <label for="name">Occupation</label>
+            <select id="occupation" name="ocupation" required>
+              <option value="">Select Occupation</option>
+              <option value="personal">Salaried Employees</option>
+              <option value="business">Self-Employed Professionals</option>
+              <option value="education">Partnership/Proprietorship</option>
+              <option value="education">Contractors/Freelancers</option>
+              <option value="education">Commission-Based Professionals</option>
+              <option value="education">Retired Individuals</option>
+              <option value="education">Seasonal Workers</option>
+              <option value="other">Student</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="name">Employment Status</label>
+            <select name="employeestatus" id="status">
+              <option value="">Select Occupation</option>
+              <option value="full">Full-time</option>
+              <option value="part">Part-Time</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="name">Employer/Self-Employed Name</label>
+            <input type="text" name="employer" required />
+          </div>
+          <div class="form-group">
+            <label for="name">Total Income</label>
+            <input type="number" name="income" required />
+          </div>
+        </div>
+        <h2>Loan:</h2>
+        <hr>
+        <div class="loan-details">
+          <div class="form-group">
+            <label for="name">Loan Amount</label>
+            <input type="number" name="loanAmount" required />
+          </div>
+          <div class="form-group">
+            <label for="name">Loan Tenor</label>
+            <select id="duration" name="duration" required>
+                <option value="">Select Duration</option>
+                <option value="three">3 Months</option>
+                <option value="six">6 Months</option>
+                <option value="nine">9 Months</option>
+                <option value="twelve">12 Months</option>
+                <option value="eighteen">18 months</option>
+                <option value="twentyfour">24 months</option>
+              </select>
+          </div>
+          <div class="form-group">
+            <label for="name">Loan Purpose</label>
+            <select id="purpose" name="purpose" required>
+              <option value="">Select Purpose</option>
+              <option value="personal">Personal</option>
+              <option value="business">Business</option>
+              <option value="education">Education</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="name">Interest Rate Type</label>
+            <select name="interest">
+                <option value="">Select Interest Type</option>
+                <option value="simple">Simple</option>
+                <option value="compound">Compound</option>
+                <option value="effective">Effective</option>
+              <option value="fixed">Fixed</option>
+              <option value="variable">Variable</option>
+              <option value="discounted">Discounted</option>
+            </select>
+          </div>
+        </div>
+        <div class="button-group">
+          <button type="submit">SUBMIT</button>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+
+@if (toastVisible) {
+<app-toast [heading]="toastHeading" [description]="toastDescription">
+</app-toast>
+}

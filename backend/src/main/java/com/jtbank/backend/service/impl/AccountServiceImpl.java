@@ -6,6 +6,7 @@ import com.jtbank.backend.model.Transaction;
 import com.jtbank.backend.repository.AccountRepository;
 import com.jtbank.backend.repository.AddressRepository;
 import com.jtbank.backend.service.IAccountService;
+import com.jtbank.backend.service.IMailService;
 import com.jtbank.backend.service.ITransactionService;
 import com.jtbank.backend.utility.GenerateAccountNumber;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -26,6 +28,7 @@ public class AccountServiceImpl implements IAccountService {
     private final AccountRepository accountRepository;
     private final AddressRepository addressRepository;
     private final ITransactionService transactionService;
+    private final IMailService mailService;
     private final PasswordEncoder passwordEncoder;
 
     @Value("${upload.file.name}")
@@ -125,7 +128,7 @@ public class AccountServiceImpl implements IAccountService {
 
     @Transactional
     @Override
-    public void transfer(long sender, long receiver, double balance) {
+    public void transfer(long sender, long receiver, double balance) throws UnsupportedEncodingException {
         var receiverAccount = accountRepository.existsByAccountNumber(receiver);
         if (!receiverAccount) {
             throw new RuntimeException("Receiver account not found");
@@ -139,6 +142,11 @@ public class AccountServiceImpl implements IAccountService {
         }
 
         accountRepository.addBalance(receiver, balance);
+        var account = getAccount(receiver);
+        var name = account.getAccountHolderName();
+        var email = account.getCredential().getAccountEmail();
+        mailService.sendMoneyReceivedSuccessfulMessage(name, email, receiver, sender, balance);
+
         accountRepository.deductBalance(sender, balance);
 
         var transaction = new Transaction();

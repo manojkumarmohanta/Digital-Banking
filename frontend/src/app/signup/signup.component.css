@@ -6,8 +6,15 @@ header {
     box-shadow: 5px 5px 5px var(--primary-shadow);
 }
 
-section {
-    background-color: var(--primary-white);
+.form-container{
+    padding: 1%;
+    background-image: url("../../assets/servicebanking---financeheroleft.webp");
+    background-size: cover;
+    background-position: center;
+}
+
+.signup-form {
+    background-color: var(--secondary-wheat);
     box-shadow: 10px 10px 10px var(--primary-shadow);
     border-radius: 1rem;
     width: clamp(300px, 50%, 500px);
@@ -67,7 +74,7 @@ textarea {
 }
 
 .form-footer p {
-    color: gray;
+    color: black;
 }
 
 .form-footer a {
@@ -75,5 +82,5 @@ textarea {
 }
 
 .gray {
-    background-color: gray !important;
+    background-color: rgb(111, 110, 110) !important;
 }

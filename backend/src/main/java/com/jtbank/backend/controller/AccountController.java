@@ -2,9 +2,11 @@ package com.jtbank.backend.controller;
 
 import com.jtbank.backend.dto.*;
 import com.jtbank.backend.mapper.AccountMapper;
+import com.jtbank.backend.model.Account;
 import com.jtbank.backend.model.Credential;
 import com.jtbank.backend.service.IAccountService;
 import com.jtbank.backend.service.IJWTService;
+import com.jtbank.backend.service.IMailService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 @RestController
@@ -22,13 +25,17 @@ import java.util.List;
 public class AccountController {
     private final IAccountService accountService;
     private final IJWTService jwtService;
+    private final IMailService mailService;
     private final AuthenticationManager authenticationManager;
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public AccountResponseDTO createAccount(@Valid @RequestBody AccountRequestDTO dto) {
+    public AccountResponseDTO createAccount(@Valid @RequestBody AccountRequestDTO dto) throws UnsupportedEncodingException {
         var account = AccountMapper.modelMapper(dto);
         var result = accountService.createAccount(account);
+        var email = account.getCredential().getAccountEmail();
+        var name = account.getAccountHolderName();
+        mailService.sendRegisterSuccessfulMessage(name, email);
         return AccountMapper.dtoMapper(result);
     }
 
@@ -42,13 +49,16 @@ public class AccountController {
 
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public TokenDTO accountByEmailAndPassword(@RequestBody Credential credential) {
+    public TokenDTO accountByEmailAndPassword(@RequestBody Credential credential) throws UnsupportedEncodingException {
         var auth = new UsernamePasswordAuthenticationToken(credential.getAccountEmail(),
                 credential.getAccountPassword());
         authenticationManager.authenticate(auth);
 
         var account = accountService.getAccountByEmail(credential.getAccountEmail());
         var token = jwtService.generateToken(String.valueOf(account.getAccountNumber()));
+        var email = credential.getAccountEmail();
+        var name = account.getAccountHolderName();
+        mailService.sendLoginSuccessfulMessage(name, email);
         return new TokenDTO(token);
     }
 
@@ -66,28 +76,46 @@ public class AccountController {
 
     @PutMapping("/{accountNumber}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public AccountResponseDTO updateAccount(@PathVariable long accountNumber, @RequestBody UpdateDTO dto) {
+    public AccountResponseDTO updateAccount(@PathVariable long accountNumber, @RequestBody UpdateDTO dto) throws UnsupportedEncodingException {
         var account = AccountMapper.modelMapper(dto);
         var result = accountService.updateAccount(accountNumber, account);
+        var name = account.getAccountHolderName();
+        var email = account.getCredential().getAccountEmail();
+        mailService.sendProfileUpdateSuccessfulMessage(name, email);
         return AccountMapper.dtoMapper(result);
     }
 
     @PatchMapping("/deposit/{balance}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deposit(@RequestAttribute long accountNumber, @PathVariable double balance) {
+    public void deposit(@RequestAttribute long accountNumber, @PathVariable double balance) throws UnsupportedEncodingException {
         accountService.depositBalance(accountNumber, balance);
+        Account account = accountService.getAccount(accountNumber);
+        var name = account.getAccountHolderName();
+        var email = account.getCredential().getAccountEmail();
+        var updatedBalance = account.getAccountBalance() + balance;
+        mailService.sendDepositSuccessfulMessage(name, email, balance, updatedBalance, accountNumber);
     }
 
     @PatchMapping("/withdrawal/{balance}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void withdraw(@RequestAttribute long accountNumber, @PathVariable double balance) {
+    public void withdraw(@RequestAttribute long accountNumber, @PathVariable double balance) throws UnsupportedEncodingException {
         accountService.withdrawalBalance(accountNumber, balance);
+        Account account = accountService.getAccount(accountNumber);
+        var name = account.getAccountHolderName();
+        var email = account.getCredential().getAccountEmail();
+        var updatedBalance = account.getAccountBalance() - balance;
+        mailService.sendWithdrawalSuccessfulMessage(name, email, balance, updatedBalance, accountNumber);
     }
 
     @PatchMapping("/transfer/{receiver}/balance/{balance}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void transfer(@RequestAttribute("accountNumber") long sender, @PathVariable long receiver, @PathVariable double balance) {
+    public void transfer(@RequestAttribute("accountNumber") long sender, @PathVariable long receiver, @PathVariable double balance) throws UnsupportedEncodingException {
         accountService.transfer(sender, receiver, balance);
+        Account account = accountService.getAccount(sender);
+        var name = account.getAccountHolderName();
+        var email = account.getCredential().getAccountEmail();
+        var updatedBalance = account.getAccountBalance() - balance;
+        mailService.sendTransferSuccessfulMessage(name, email, balance, updatedBalance, sender, receiver);
     }
 
     @DeleteMapping("/number/{accountNumber}")
