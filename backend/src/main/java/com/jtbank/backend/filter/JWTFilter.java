@@ -28,7 +28,7 @@ public class JWTFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         var path = request.getRequestURI();
 
-        var passedPaths = List.of("login", "register", "create", "swagger", "api-doc",
+        var passedPaths = List.of("login", "register", "OtpValidateAndRegister", "create", "swagger", "api-doc",
                 "/banking/api/v1/accounts/\\d+/image");
 
         for (var passedPath : passedPaths) {

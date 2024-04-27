@@ -65,7 +65,7 @@ textarea {
 .form-body form input[type="submit"]:hover{
     transform: scale(1.05);
     box-shadow: 0 20px 30px rgba(0,0,0,.12), 0 15px 20px rgba(0,0,0,.06);
-  }
+}
 
 .form-footer {
     display: grid;
@@ -84,3 +84,38 @@ textarea {
 .gray {
     background-color: rgb(111, 110, 110) !important;
 }
+
+app-modal input {
+    display: block;
+    outline: none;
+    width: 100%;
+    font-size: medium;
+    border: 1px solid var(--secondary-sky);
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.2rem;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-weight: bolder;
+}
+
+app-modal .button-group {
+    padding-block: 0.5rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+app-modal .button-group button {
+    border: none;
+    background-color: var(--secondary-purple);
+    box-shadow: 5px 5px 5px var(--primary-shadow);
+    color: var(--primary-white);
+    cursor: pointer;
+    text-transform: uppercase;
+    padding: 0.3rem 1.5rem;
+    border-radius: 0.5rem;
+    font-size: small;
+}
+
+app-modal .button-group button:hover{
+    transform: scale(1.05);
+  }

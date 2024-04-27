@@ -30,6 +30,25 @@ public class MailServiceImpl implements IMailService {
     }
 
     @Override
+    public void sendOtp(String name, String email, String otp) throws UnsupportedEncodingException {
+        SimpleMailMessage message = new SimpleMailMessage();
+        InternetAddress from = new InternetAddress("digitalbanking.mcaproject@gmail.com", "Digital-Banking Team");
+        String subject = "OTP for Registration";
+        String body = "Dear, "+name+"\n" +
+                "\n" +
+                "Thank you for registering with Digital-Banking. Your OTP (One Time Password) for registration is: ["+otp+
+                "] \n Please enter this OTP in the form to complete your registration process. " +
+                "\n\n If you did not request this OTP, please ignore this email or contact to our " +
+                "customer support team at "+sender+
+                "\nDigital Banking Team";
+        message.setFrom(String.valueOf(from));
+        message.setSubject(subject);
+        message.setText(body);
+        message.setTo(email);
+        javaMailSender.send(message);
+    }
+
+    @Override
     public void sendRegisterSuccessfulMessage(String name, String email) throws UnsupportedEncodingException {
         SimpleMailMessage message = new SimpleMailMessage();
         InternetAddress from = new InternetAddress("digitalbanking.mcaproject@gmail.com", "Digital-Banking Team");
@@ -38,7 +57,7 @@ public class MailServiceImpl implements IMailService {
                 "\n" +
                 "Thank you for choosing 'Digital-Banking' for your banking needs. We are delighted to inform you that" +
                 " your online banking account has been successfully created on "+LocalDateTime.now().format(dateTimeFormatter())+"\n\n"+
-                "For security reasons, we recommend that you change your temporary password upon logging in for the " +
+                "For security reasons, we recommend that you change your password upon logging in for the " +
                 "first time."+"\n\n"+
                 "If you have any questions or need assistance, please do not hesitate to contact to our " +
                 "customer support team at "+sender+".\n\nWelcome aboard, and thank you for banking with us!\n" +

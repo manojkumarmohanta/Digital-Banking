@@ -19,7 +19,7 @@
                     <option value="SAVINGS">SAVINGS</option>
                 </select>
                 <textarea name="aboutCustomer" placeholder="About customer" rows="2" required ngModel></textarea>
-                <input type="submit" value="Sign up" [disabled]="!signupform.valid" [class.gray]="!signupform.valid" />
+                <input type="submit" value="Sign up" [disabled]="!signupform.valid" [class.gray]="!signupform.valid" (click)="modalVisible = !modalVisible"/>
             </form>
         </div>
         <div class="form-footer">
@@ -28,6 +28,16 @@
         </div>
     </section>
 </section>
+@if (modalVisible) {
+    <app-modal [header]="'Validate Your Email'">
+        <form method="post" #otpInputForm="ngForm" (submit)="validateOtp(otpInputForm)">
+            <input type="text" placeholder="Enter the OTP..." class="w-100"  name="otp" required ngModel/>
+            <div class="button-group">
+                <button type="submit">Validate</button>
+            </div>
+        </form>
+    </app-modal>
+}
 @if(toastVisible) {
 <app-toast [heading]="toastHeading" [description]="toastDescription"></app-toast>
 }

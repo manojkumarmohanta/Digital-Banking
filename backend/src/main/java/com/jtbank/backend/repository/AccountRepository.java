@@ -31,4 +31,6 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
     void deductBalance(@PathParam("accountNumber") long accountNumber, @PathParam("balance") double balance);
 
     boolean existsByAccountNumber(long accountNumber);
+
+    Optional<Account> findByOtp(String otp);
 }

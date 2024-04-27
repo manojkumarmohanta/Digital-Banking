@@ -1,7 +1,10 @@
 package com.jtbank.backend.model;
 
+import com.jtbank.backend.constant.AccountStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.Data;
 
 @Embeddable
@@ -11,4 +14,6 @@ public class Credential {
     private String accountEmail;
     @Column(nullable = false)
     private String accountPassword;
+    @Enumerated(EnumType.STRING)
+    private AccountStatus status;
 }

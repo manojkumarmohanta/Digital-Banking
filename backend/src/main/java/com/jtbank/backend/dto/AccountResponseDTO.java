@@ -1,5 +1,6 @@
 package com.jtbank.backend.dto;
 
+import com.jtbank.backend.constant.AccountStatus;
 import com.jtbank.backend.constant.AccountType;
 
 public record AccountResponseDTO(
@@ -13,6 +14,7 @@ public record AccountResponseDTO(
         String city,
         String state,
         String country,
-        String zipcode
+        String zipcode,
+        AccountStatus accountStatus
 ) {
 }

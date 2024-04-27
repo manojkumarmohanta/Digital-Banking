@@ -1,6 +1,7 @@
 package com.jtbank.backend.service;
 
 import com.jtbank.backend.model.Account;
+import jakarta.mail.MessagingException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
@@ -33,6 +34,8 @@ public interface IAccountService {
     byte[] getProfilePicture(long accountNumber) throws Exception;
 
     Account getAccount(long accountNumber);
+
+    Account getAccountByOtp(String otp);
 
     Account getAccountBySlNo(int slNo);
 

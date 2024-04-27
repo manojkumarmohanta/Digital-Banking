@@ -3,6 +3,8 @@ package com.jtbank.backend.service;
 import java.io.UnsupportedEncodingException;
 
 public interface IMailService {
+    void sendOtp(String name, String email, String otp) throws UnsupportedEncodingException;
+
     void sendRegisterSuccessfulMessage(String name, String email) throws UnsupportedEncodingException;
 
     void sendLoginSuccessfulMessage(String name, String email) throws UnsupportedEncodingException;

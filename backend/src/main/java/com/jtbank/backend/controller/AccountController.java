@@ -1,5 +1,6 @@
 package com.jtbank.backend.controller;
 
+import com.jtbank.backend.constant.AccountStatus;
 import com.jtbank.backend.dto.*;
 import com.jtbank.backend.mapper.AccountMapper;
 import com.jtbank.backend.model.Account;
@@ -7,6 +8,7 @@ import com.jtbank.backend.model.Credential;
 import com.jtbank.backend.service.IAccountService;
 import com.jtbank.backend.service.IJWTService;
 import com.jtbank.backend.service.IMailService;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -28,14 +31,37 @@ public class AccountController {
     private final IMailService mailService;
     private final AuthenticationManager authenticationManager;
 
+    @PostMapping("/OtpValidateAndRegister")
+    @ResponseStatus(HttpStatus.OK)
+    public void validateAccount(@RequestParam("otp") String otp) throws UnsupportedEncodingException, MessagingException {
+        var user = accountService.getAccountByOtp(otp);
+        
+        if (user!=null && user.getOtp()!=null && user.getOtp().equals(otp)){
+            LocalDateTime otpCreationTime = user.getOtpCreationTime();
+            LocalDateTime currentTime = LocalDateTime.now();
+
+            if (otpCreationTime.plusMinutes(3).isAfter(currentTime)){
+                var credential =  user.getCredential();
+                credential.setStatus(AccountStatus.ACTIVE);
+                var email = credential.getAccountEmail();
+                var name = user.getAccountHolderName();
+                mailService.sendRegisterSuccessfulMessage(name, email);
+            }else {
+                accountService.deleteAccount(user.getAccountNumber());
+            }
+
+        }
+    }
+
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public AccountResponseDTO createAccount(@Valid @RequestBody AccountRequestDTO dto) throws UnsupportedEncodingException {
+    public AccountResponseDTO createAccount(@Valid @RequestBody AccountRequestDTO dto) throws UnsupportedEncodingException, MessagingException {
         var account = AccountMapper.modelMapper(dto);
         var result = accountService.createAccount(account);
-        var email = account.getCredential().getAccountEmail();
-        var name = account.getAccountHolderName();
-        mailService.sendRegisterSuccessfulMessage(name, email);
+        var email = result.getCredential().getAccountEmail();
+        var name = result.getAccountHolderName();
+        var otp = result.getOtp();
+        mailService.sendOtp(name, email, otp);
         return AccountMapper.dtoMapper(result);
     }
 
@@ -49,17 +75,21 @@ public class AccountController {
 
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public TokenDTO accountByEmailAndPassword(@RequestBody Credential credential) throws UnsupportedEncodingException {
-        var auth = new UsernamePasswordAuthenticationToken(credential.getAccountEmail(),
-                credential.getAccountPassword());
-        authenticationManager.authenticate(auth);
+    public TokenDTO accountByEmailAndPassword(@RequestBody Credential credential) throws UnsupportedEncodingException, IllegalAccessException {
+        if (credential.getStatus().equals(AccountStatus.ACTIVE)){
+            var auth = new UsernamePasswordAuthenticationToken(credential.getAccountEmail(),
+                    credential.getAccountPassword());
+            authenticationManager.authenticate(auth);
 
-        var account = accountService.getAccountByEmail(credential.getAccountEmail());
-        var token = jwtService.generateToken(String.valueOf(account.getAccountNumber()));
-        var email = credential.getAccountEmail();
-        var name = account.getAccountHolderName();
-        mailService.sendLoginSuccessfulMessage(name, email);
-        return new TokenDTO(token);
+            var account = accountService.getAccountByEmail(credential.getAccountEmail());
+            var token = jwtService.generateToken(String.valueOf(account.getAccountNumber()));
+            var email = credential.getAccountEmail();
+            var name = account.getAccountHolderName();
+            mailService.sendLoginSuccessfulMessage(name, email);
+            return new TokenDTO(token);
+        }else{
+            throw new IllegalAccessException("User not Validated.");
+        }
     }
 
     @PostMapping("/image")
@@ -80,7 +110,7 @@ public class AccountController {
         var account = AccountMapper.modelMapper(dto);
         var result = accountService.updateAccount(accountNumber, account);
         var name = account.getAccountHolderName();
-        var email = account.getCredential().getAccountEmail();
+        var email = result.getCredential().getAccountEmail();
         mailService.sendProfileUpdateSuccessfulMessage(name, email);
         return AccountMapper.dtoMapper(result);
     }

@@ -1,5 +1,6 @@
 package com.jtbank.backend.service.impl;
 
+import com.jtbank.backend.constant.AccountStatus;
 import com.jtbank.backend.constant.TransactionMode;
 import com.jtbank.backend.model.Account;
 import com.jtbank.backend.model.Transaction;
@@ -9,6 +10,7 @@ import com.jtbank.backend.service.IAccountService;
 import com.jtbank.backend.service.IMailService;
 import com.jtbank.backend.service.ITransactionService;
 import com.jtbank.backend.utility.GenerateAccountNumber;
+import com.jtbank.backend.utility.GenerateOTP;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -35,10 +38,14 @@ public class AccountServiceImpl implements IAccountService {
     private String uploadFileLocation;
 
     @Override
-    public Account createAccount(Account account) {
+    public Account createAccount(Account account){
         account.setAccountNumber(GenerateAccountNumber.generate());
+        account.setOtp(GenerateOTP.generateOtp());
+        account.setOtpCreationTime(LocalDateTime.now());
+        account.setOtpExpiration(LocalDateTime.now().plusMinutes(3)); // Expiration time 3 minutes from now
         var bcrypt = passwordEncoder.encode(account.getCredential().getAccountPassword());
         account.getCredential().setAccountPassword(bcrypt);
+        account.getCredential().setStatus(AccountStatus.INACTIVE);
 
         accountRepository.save(account);
         return account;
@@ -188,6 +195,11 @@ public class AccountServiceImpl implements IAccountService {
     @Override
     public Account getAccount(long accountNumber) {
         return accountRepository.findByAccountNumber(accountNumber).orElseThrow();
+    }
+
+    @Override
+    public Account getAccountByOtp(String otp) {
+        return accountRepository.findByOtp(otp).orElseThrow();
     }
 
     @Override

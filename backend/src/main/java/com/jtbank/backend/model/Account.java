@@ -5,6 +5,7 @@ import com.jtbank.backend.model.helper.Auditing;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @AllArgsConstructor
@@ -37,4 +38,7 @@ public class Account extends Auditing {
     private Address address;
     @OneToMany(fetch = FetchType.EAGER,mappedBy = "account", cascade = CascadeType.ALL)
     private List<Transaction> transactions;
+    private String otp;
+    private LocalDateTime otpExpiration;
+    private LocalDateTime otpCreationTime;
 }

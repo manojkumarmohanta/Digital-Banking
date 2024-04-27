@@ -14,6 +14,10 @@ export class AccountService {
 
   constructor() { }
 
+  validateOTP(otp: string) {
+    return this.http.post(BASE_URL + "/OtpValidateAndRegister" + otp, this.noauth);
+  }
+
   createAccount(account: any) {
     return this.http.post(BASE_URL + "/register", account, this.noauth);
   }
