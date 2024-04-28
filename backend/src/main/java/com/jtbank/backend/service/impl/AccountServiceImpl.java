@@ -45,7 +45,7 @@ public class AccountServiceImpl implements IAccountService {
         account.setOtpExpirationTime(LocalDateTime.now().plusMinutes(3)); // Expiration time 3 minutes from now
         var bcrypt = passwordEncoder.encode(account.getCredential().getAccountPassword());
         account.getCredential().setAccountPassword(bcrypt);
-        account.getCredential().setStatus(AccountStatus.INACTIVE);
+        account.setStatus(AccountStatus.INACTIVE);
 
         accountRepository.save(account);
         return account;

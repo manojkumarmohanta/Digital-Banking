@@ -14,6 +14,4 @@ public class Credential {
     private String accountEmail;
     @Column(nullable = false)
     private String accountPassword;
-    @Enumerated(EnumType.STRING)
-    private AccountStatus status;
 }

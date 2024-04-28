@@ -5,6 +5,7 @@ import com.jtbank.backend.dto.*;
 import com.jtbank.backend.mapper.AccountMapper;
 import com.jtbank.backend.model.Account;
 import com.jtbank.backend.model.Credential;
+import com.jtbank.backend.repository.AccountRepository;
 import com.jtbank.backend.service.IAccountService;
 import com.jtbank.backend.service.IJWTService;
 import com.jtbank.backend.service.IMailService;
@@ -30,19 +31,21 @@ public class AccountController {
     private final IJWTService jwtService;
     private final IMailService mailService;
     private final AuthenticationManager authenticationManager;
+    private final AccountRepository accountRepository;
 
-    @PostMapping("/OtpValidateAndRegister/{otp}")
-    @ResponseStatus(HttpStatus.OK)
-    public void validateAccount(@PathVariable String otp) throws UnsupportedEncodingException {
+    @PostMapping("/OtpValidateAndRegister")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void validateAccount(@RequestBody OtpRequestDTO userOtp) throws UnsupportedEncodingException {
+        var otp = userOtp.otp();
         var user = accountService.getAccountByOtp(otp);
 
         if (user.getOtp().equals(otp)){
             LocalDateTime otpCreationTime = user.getOtpCreationTime();
             LocalDateTime currentTime = LocalDateTime.now();
             if (otpCreationTime.plusMinutes(3).isAfter(currentTime)){
-                var credential = user.getCredential();
-                credential.setStatus(AccountStatus.ACTIVE);
-                var email = credential.getAccountEmail();
+                user.setStatus(AccountStatus.ACTIVE);
+                accountRepository.save(user);
+                var email = user.getCredential().getAccountEmail();
                 var name = user.getAccountHolderName();
                 mailService.sendRegisterSuccessfulMessage(name, email);
             }else {
@@ -51,7 +54,7 @@ public class AccountController {
 
         }
         else {
-            throw  new RuntimeException("OTP is not validated.");
+            throw  new RuntimeException("Incorrect OTP.");
         }
     }
 
@@ -80,7 +83,7 @@ public class AccountController {
     public TokenDTO accountByEmailAndPassword(@RequestBody Credential credential) throws UnsupportedEncodingException, IllegalAccessException {
         var email = credential.getAccountEmail();
         var result = accountService.getAccountByEmail(email);
-        var status = result.getCredential().getStatus();
+        var status = result.getStatus();
         if (status.equals(AccountStatus.ACTIVE)){
             var auth = new UsernamePasswordAuthenticationToken(credential.getAccountEmail(),
                     credential.getAccountPassword());

@@ -1,5 +1,6 @@
 package com.jtbank.backend.model;
 
+import com.jtbank.backend.constant.AccountStatus;
 import com.jtbank.backend.constant.AccountType;
 import com.jtbank.backend.model.helper.Auditing;
 import jakarta.persistence.*;
@@ -19,9 +20,9 @@ public class Account extends Auditing {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int accountSlNo;
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
     private long accountNumber;
-    @Column(name = "customer_name", nullable = false)
+    @Column(name = "customer_name")
     private String accountHolderName;
     @Column(nullable = false)
     private String contactNumber;
@@ -38,10 +39,12 @@ public class Account extends Auditing {
     private Address address;
     @OneToMany(fetch = FetchType.EAGER,mappedBy = "account", cascade = CascadeType.ALL)
     private List<Transaction> transactions;
-    @Column(nullable = false)
+    @Column(name = "Otp")
     private String otp;
-    @Column(nullable = false)
+    @Column(name = "OtpCreationTime")
     private LocalDateTime otpCreationTime;
-    @Column(nullable = false)
+    @Column(name = "OtpExpirationTime")
     private LocalDateTime otpExpirationTime;
+    @Enumerated(EnumType.STRING)
+    private AccountStatus status;
 }

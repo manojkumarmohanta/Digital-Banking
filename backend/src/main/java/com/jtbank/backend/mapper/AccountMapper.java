@@ -68,7 +68,7 @@ public class AccountMapper {
                 address.getState(),
                 address.getCountry(),
                 address.getZipcode(),
-                credential.getStatus()
+                account.getStatus()
         );
     }
 }

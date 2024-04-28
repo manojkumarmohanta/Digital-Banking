@@ -20,7 +20,6 @@ export class SignupComponent {
   toastDescription = ""; 
   toastVisible = false;
   modalVisible = false;
-  showOtpInput= false;
     
   validateOtp(form: NgForm) {
     if (form.valid) {
