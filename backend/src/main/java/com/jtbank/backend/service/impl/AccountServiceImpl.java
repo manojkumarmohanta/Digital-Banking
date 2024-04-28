@@ -42,7 +42,7 @@ public class AccountServiceImpl implements IAccountService {
         account.setAccountNumber(GenerateAccountNumber.generate());
         account.setOtp(GenerateOTP.generateOtp());
         account.setOtpCreationTime(LocalDateTime.now());
-        account.setOtpExpiration(LocalDateTime.now().plusMinutes(3)); // Expiration time 3 minutes from now
+        account.setOtpExpirationTime(LocalDateTime.now().plusMinutes(3)); // Expiration time 3 minutes from now
         var bcrypt = passwordEncoder.encode(account.getCredential().getAccountPassword());
         account.getCredential().setAccountPassword(bcrypt);
         account.getCredential().setStatus(AccountStatus.INACTIVE);

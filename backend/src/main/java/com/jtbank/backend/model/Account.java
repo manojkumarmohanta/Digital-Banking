@@ -38,7 +38,10 @@ public class Account extends Auditing {
     private Address address;
     @OneToMany(fetch = FetchType.EAGER,mappedBy = "account", cascade = CascadeType.ALL)
     private List<Transaction> transactions;
+    @Column(nullable = false)
     private String otp;
-    private LocalDateTime otpExpiration;
+    @Column(nullable = false)
     private LocalDateTime otpCreationTime;
+    @Column(nullable = false)
+    private LocalDateTime otpExpirationTime;
 }

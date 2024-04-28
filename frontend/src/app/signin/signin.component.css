@@ -1,17 +1,18 @@
 header {
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     background-color: var(--primary-purple);
-    color: var(--primary-white);
     text-align: center;
+    color: var(--primary-white);
     padding-block: 1rem;
     box-shadow: 5px 5px 5px var(--primary-shadow);
 }
 
 .form-container{
-    padding: 20.6%;
+    padding: 40%;
     background-image: url("../../assets/money-finance-bank-cash.jpg");
     background-size: cover;
-    background-position: center;
+    background-size: cover;
+    background-position: bottom;
 }
 
 .signin-form {

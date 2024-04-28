@@ -31,17 +31,16 @@ public class AccountController {
     private final IMailService mailService;
     private final AuthenticationManager authenticationManager;
 
-    @PostMapping("/OtpValidateAndRegister")
+    @PostMapping("/OtpValidateAndRegister/{otp}")
     @ResponseStatus(HttpStatus.OK)
-    public void validateAccount(@RequestParam("otp") String otp) throws UnsupportedEncodingException, MessagingException {
+    public void validateAccount(@PathVariable String otp) throws UnsupportedEncodingException {
         var user = accountService.getAccountByOtp(otp);
-        
-        if (user!=null && user.getOtp()!=null && user.getOtp().equals(otp)){
+
+        if (user.getOtp().equals(otp)){
             LocalDateTime otpCreationTime = user.getOtpCreationTime();
             LocalDateTime currentTime = LocalDateTime.now();
-
             if (otpCreationTime.plusMinutes(3).isAfter(currentTime)){
-                var credential =  user.getCredential();
+                var credential = user.getCredential();
                 credential.setStatus(AccountStatus.ACTIVE);
                 var email = credential.getAccountEmail();
                 var name = user.getAccountHolderName();
@@ -50,6 +49,9 @@ public class AccountController {
                 accountService.deleteAccount(user.getAccountNumber());
             }
 
+        }
+        else {
+            throw  new RuntimeException("OTP is not validated.");
         }
     }
 
@@ -61,7 +63,7 @@ public class AccountController {
         var email = result.getCredential().getAccountEmail();
         var name = result.getAccountHolderName();
         var otp = result.getOtp();
-        mailService.sendOtp(name, email, otp);
+        mailService.sendOtp(name, email, String.valueOf(otp));
         return AccountMapper.dtoMapper(result);
     }
 
@@ -76,14 +78,16 @@ public class AccountController {
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public TokenDTO accountByEmailAndPassword(@RequestBody Credential credential) throws UnsupportedEncodingException, IllegalAccessException {
-        if (credential.getStatus().equals(AccountStatus.ACTIVE)){
+        var email = credential.getAccountEmail();
+        var result = accountService.getAccountByEmail(email);
+        var status = result.getCredential().getStatus();
+        if (status.equals(AccountStatus.ACTIVE)){
             var auth = new UsernamePasswordAuthenticationToken(credential.getAccountEmail(),
                     credential.getAccountPassword());
             authenticationManager.authenticate(auth);
 
             var account = accountService.getAccountByEmail(credential.getAccountEmail());
             var token = jwtService.generateToken(String.valueOf(account.getAccountNumber()));
-            var email = credential.getAccountEmail();
             var name = account.getAccountHolderName();
             mailService.sendLoginSuccessfulMessage(name, email);
             return new TokenDTO(token);

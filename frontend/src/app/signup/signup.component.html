@@ -31,7 +31,7 @@
 @if (modalVisible) {
     <app-modal [header]="'Validate Your Email'">
         <form method="post" #otpInputForm="ngForm" (submit)="validateOtp(otpInputForm)">
-            <input type="text" placeholder="Enter the OTP..." class="w-100"  name="otp" required ngModel/>
+            <input type="text" placeholder="Enter the OTP..." class="w-100" name="otp" required ngModel/>
             <div class="button-group">
                 <button type="submit">Validate</button>
             </div>

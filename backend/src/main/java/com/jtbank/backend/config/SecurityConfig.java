@@ -5,7 +5,6 @@ import com.jtbank.backend.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -48,7 +47,8 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(request -> {
             request
-                    .requestMatchers("/api/v1/accounts/register", "api/v1/accounts/OtpValidateAndRegister","/api/v1/accounts/create").permitAll()
+                    .requestMatchers("/api/v1/accounts/register","/api/v1/accounts/create").permitAll()
+                    .requestMatchers("/api/v1/accounts/OtpValidateAndRegister").permitAll()
                     .requestMatchers("/api/v1/accounts/login").permitAll()
                     .requestMatchers("/api/v1/accounts/*/image").permitAll()
                     .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()

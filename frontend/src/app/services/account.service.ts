@@ -1,7 +1,8 @@
-  import { HttpClient } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Account } from '../model/account';
 import { environment } from '../../environments/environment.development';
+import { Otp } from '../model/otp';
 
 export const BASE_URL = environment.base_url + '/accounts';
 
@@ -14,8 +15,8 @@ export class AccountService {
 
   constructor() { }
 
-  validateOTP(otp: string) {
-    return this.http.post(BASE_URL + "/OtpValidateAndRegister" + otp, this.noauth);
+  validateOTP(otp: Otp) {
+    return this.http.post(BASE_URL + "/OtpValidateAndRegister/" + otp, this.noauth);
   }
 
   createAccount(account: any) {
