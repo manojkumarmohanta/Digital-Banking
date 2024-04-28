@@ -51,7 +51,8 @@
 @if (modalVisible) {
 <app-modal [header]="'Deposit form'">
     <form method="post" #depositForm="ngForm" (ngSubmit)="onDeposit(depositForm)">
-        <input type="text" placeholder="Amount" class="w-100" name="balance" required ngModel />
+        <input type="text" placeholder="Amount" class="w-100" name="balance" required ngModel /><br>
+        <input type="password" placeholder="Enter Your Password" class="w-100" name="password" required ngModel />
         <div class="button-group">
             <button type="submit">Deposit</button>
             <button type="button" (click)="modalVisible = !modalVisible">

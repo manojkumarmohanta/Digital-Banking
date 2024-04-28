@@ -57,7 +57,8 @@ export class TransferComponent implements OnInit{
     if (form.valid) {
       const balance = form.value.balance;
       const receiever = form.value.receiever;
-      this.accountService.transferBalance(balance, receiever).subscribe({
+      const password = form.value.password;
+      this.accountService.transferBalance(balance, receiever, password).subscribe({
         next: res => {
           this.generateToast("Success", "Amount Transfered Successfully.");
         },

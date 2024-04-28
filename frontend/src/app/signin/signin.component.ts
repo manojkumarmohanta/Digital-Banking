@@ -28,7 +28,7 @@ export class SigninComponent {
           this.router.navigate(["dashboard"])
         },
         error: err => {
-          this.generateToast("Failure", "Unauthorized access")
+          this.generateToast("Failure", "Invalid Credentials!")
         }
       })
     }

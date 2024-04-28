@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,6 +33,7 @@ public class AccountController {
     private final IMailService mailService;
     private final AuthenticationManager authenticationManager;
     private final AccountRepository accountRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/OtpValidateAndRegister")
     @ResponseStatus(HttpStatus.CREATED)
@@ -49,9 +51,9 @@ public class AccountController {
                 var name = user.getAccountHolderName();
                 mailService.sendRegisterSuccessfulMessage(name, email);
             }else {
-                accountService.deleteAccount(user.getAccountNumber());
+                var accountNumber = user.getAccountNumber();
+                accountService.deleteAccount(accountNumber);
             }
-
         }
         else {
             throw  new RuntimeException("Incorrect OTP.");
@@ -84,18 +86,22 @@ public class AccountController {
         var email = credential.getAccountEmail();
         var result = accountService.getAccountByEmail(email);
         var status = result.getStatus();
-        if (status.equals(AccountStatus.ACTIVE)){
-            var auth = new UsernamePasswordAuthenticationToken(credential.getAccountEmail(),
-                    credential.getAccountPassword());
-            authenticationManager.authenticate(auth);
+        if (email.equals(result.getCredential().getAccountEmail())){
+            if (status.equals(AccountStatus.ACTIVE)){
+                var auth = new UsernamePasswordAuthenticationToken(credential.getAccountEmail(),
+                        credential.getAccountPassword());
+                authenticationManager.authenticate(auth);
 
-            var account = accountService.getAccountByEmail(credential.getAccountEmail());
-            var token = jwtService.generateToken(String.valueOf(account.getAccountNumber()));
-            var name = account.getAccountHolderName();
-            mailService.sendLoginSuccessfulMessage(name, email);
-            return new TokenDTO(token);
-        }else{
-            throw new IllegalAccessException("User not Validated.");
+                var account = accountService.getAccountByEmail(credential.getAccountEmail());
+                var token = jwtService.generateToken(String.valueOf(account.getAccountNumber()));
+                var name = account.getAccountHolderName();
+                mailService.sendLoginSuccessfulMessage(name, email);
+                return new TokenDTO(token);
+            }else{
+                throw new IllegalAccessException("User not Validated.");
+            }
+        } else {
+            throw new IllegalAccessException("Incorrect Email Id.");
         }
     }
 
@@ -122,37 +128,57 @@ public class AccountController {
         return AccountMapper.dtoMapper(result);
     }
 
-    @PatchMapping("/deposit/{balance}")
+    @PatchMapping("/deposit/{balance}/password/{password}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deposit(@RequestAttribute long accountNumber, @PathVariable double balance) throws UnsupportedEncodingException {
-        accountService.depositBalance(accountNumber, balance);
-        Account account = accountService.getAccount(accountNumber);
-        var name = account.getAccountHolderName();
-        var email = account.getCredential().getAccountEmail();
-        var updatedBalance = account.getAccountBalance() + balance;
-        mailService.sendDepositSuccessfulMessage(name, email, balance, updatedBalance, accountNumber);
+    public void deposit(@RequestAttribute long accountNumber, @PathVariable double balance, @PathVariable String password)
+            throws UnsupportedEncodingException {
+        var accountDetails = accountService.getAccount(accountNumber);
+        var bCryptPassword = accountDetails.getCredential().getAccountPassword();
+        if (passwordEncoder.matches(password, bCryptPassword)){
+            accountService.depositBalance(accountNumber, balance);
+            Account account = accountService.getAccount(accountNumber);
+            var name = account.getAccountHolderName();
+            var email = account.getCredential().getAccountEmail();
+            var updatedBalance = account.getAccountBalance() + balance;
+            mailService.sendDepositSuccessfulMessage(name, email, balance, updatedBalance, accountNumber);
+        } else {
+            throw new RuntimeException("Incorrect Password.");
+        }
     }
 
-    @PatchMapping("/withdrawal/{balance}")
+    @PatchMapping("/withdrawal/{balance}/password/{password}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void withdraw(@RequestAttribute long accountNumber, @PathVariable double balance) throws UnsupportedEncodingException {
-        accountService.withdrawalBalance(accountNumber, balance);
-        Account account = accountService.getAccount(accountNumber);
-        var name = account.getAccountHolderName();
-        var email = account.getCredential().getAccountEmail();
-        var updatedBalance = account.getAccountBalance() - balance;
-        mailService.sendWithdrawalSuccessfulMessage(name, email, balance, updatedBalance, accountNumber);
+    public void withdraw(@RequestAttribute long accountNumber, @PathVariable double balance, @PathVariable String password) throws UnsupportedEncodingException {
+        var accountDetails = accountService.getAccount(accountNumber);
+        var bCryptPassword = accountDetails.getCredential().getAccountPassword();
+        if (passwordEncoder.matches(password, bCryptPassword)){
+            accountService.withdrawalBalance(accountNumber, balance);
+            Account account = accountService.getAccount(accountNumber);
+            var name = account.getAccountHolderName();
+            var email = account.getCredential().getAccountEmail();
+            var updatedBalance = account.getAccountBalance() - balance;
+            mailService.sendWithdrawalSuccessfulMessage(name, email, balance, updatedBalance, accountNumber);
+        } else {
+            throw new RuntimeException("Incorrect Password.");
+        }
     }
 
-    @PatchMapping("/transfer/{receiver}/balance/{balance}")
+    @PatchMapping("/transfer/{receiver}/balance/{balance}/password/{password}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void transfer(@RequestAttribute("accountNumber") long sender, @PathVariable long receiver, @PathVariable double balance) throws UnsupportedEncodingException {
-        accountService.transfer(sender, receiver, balance);
-        Account account = accountService.getAccount(sender);
-        var name = account.getAccountHolderName();
-        var email = account.getCredential().getAccountEmail();
-        var updatedBalance = account.getAccountBalance() - balance;
-        mailService.sendTransferSuccessfulMessage(name, email, balance, updatedBalance, sender, receiver);
+    public void transfer(@RequestAttribute("accountNumber") long sender, @PathVariable long receiver,
+                         @PathVariable double balance, @PathVariable String password) throws UnsupportedEncodingException {
+        var accountDetails = accountService.getAccount(sender);
+        var bCryptPassword = accountDetails.getCredential().getAccountPassword();
+        if (passwordEncoder.matches(password, bCryptPassword)){
+            accountService.transfer(sender, receiver, balance);
+            Account account = accountService.getAccount(sender);
+            var name = account.getAccountHolderName();
+            var email = account.getCredential().getAccountEmail();
+            var updatedBalance = account.getAccountBalance() - balance;
+            mailService.sendTransferSuccessfulMessage(name, email, balance, updatedBalance, sender, receiver);
+        } else {
+            throw new RuntimeException("Incorrect Password.");
+        }
     }
 
     @DeleteMapping("/number/{accountNumber}")

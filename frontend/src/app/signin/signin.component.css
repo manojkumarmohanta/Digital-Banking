@@ -8,11 +8,9 @@ header {
 }
 
 .form-container{
-    padding: 40%;
-    background-image: url("../../assets/money-finance-bank-cash.jpg");
+    padding: 20.05%;
+    background-image: url("../../assets/electronic-payments-bank-cards-e-commerce-plastic-cards.jpg");
     background-size: cover;
-    background-size: cover;
-    background-position: bottom;
 }
 
 .signin-form {
@@ -22,7 +20,7 @@ header {
     width: clamp(300px, 50%, 500px);
     position: absolute;
     top: 55%;
-    left: 70%;
+    left: 76%;
     translate: -50% -50%;
 }
 

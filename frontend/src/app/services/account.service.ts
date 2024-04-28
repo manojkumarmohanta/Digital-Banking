@@ -15,29 +15,33 @@ export class AccountService {
 
   constructor() { }
 
-  validateOTP(otp: Otp) {
-    return this.http.post(BASE_URL + "/OtpValidateAndRegister", otp, this.noauth);
-  }
-
   createAccount(account: any) {
     return this.http.post(BASE_URL + "/register", account, this.noauth);
+  }
+
+  validateOTP(otp: Otp) {
+    return this.http.post(BASE_URL + "/OtpValidateAndRegister", otp, this.noauth);
   }
 
   loginAccount(account: any) {
     return this.http.post(BASE_URL + "/login", account, this.noauth);
   }
 
-  depositBalance(balance: any) {
+  depositBalance(balance: any, password: any) {
 
-    return this.http.patch(BASE_URL + "/deposit/" + balance, {});
+    return this.http.patch(BASE_URL + "/deposit/" + balance + "/password/" + password, {});
   }
 
-  withdrawalBalance(balance: any) {
-    return this.http.patch(BASE_URL + "/withdrawal/" + balance, {});
+  withdrawalBalance(balance: any, password: any) {
+    return this.http.patch(BASE_URL + "/withdrawal/" + balance + "/password/" + password, {});
   }
 
-  transferBalance(balance: any, reciever: any) {
-    return this.http.patch(BASE_URL + "/transfer/" + reciever + "/balance/" + balance, {});
+  transferBalance(balance: any, reciever: any, password: any) {
+    return this.http.patch(BASE_URL + "/transfer/" + reciever + "/balance/" + balance + "/password/" + password, {});
+  }
+
+  loanApplication(loan: string) {
+    return this.http.post(BASE_URL + "/loanApplication", loan, {});
   }
 
   getCurrentAccount() {

@@ -168,12 +168,6 @@ public class AccountServiceImpl implements IAccountService {
         var account = getAccount(accountNumber);
         accountRepository.delete(account);
 
-        /*
-         * if (account.getAddress() != null) {
-         * addressRepository.delete(account.getAddress());
-         * }
-         */
-
         return account;
     }
 

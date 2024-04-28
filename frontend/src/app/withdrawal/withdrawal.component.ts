@@ -65,7 +65,8 @@ export class WithdrawalComponent implements OnInit {
   onWithdrawal(form: NgForm) {
     if (form.valid) {
       const balance = form.value.balance;
-      this.accountService.withdrawalBalance(balance).subscribe({
+      const password = form.value.password;
+      this.accountService.withdrawalBalance(balance, password).subscribe({
         next: (res) => {
           this.generateToast('Success', 'Amount withdrawn Successfully.');
         },

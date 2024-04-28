@@ -65,7 +65,8 @@ export class DepositComponent implements OnInit {
   onDeposit(form: NgForm) {
     if (form.valid) {
       const balance = form.value.balance;
-      this.accountService.depositBalance(balance).subscribe({
+      const password = form.value.password;
+      this.accountService.depositBalance(balance, password).subscribe({
         next: (res) => {
           this.generateToast('Success', 'Amount Deposited Successfully.');
         },

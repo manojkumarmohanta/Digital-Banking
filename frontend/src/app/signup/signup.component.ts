@@ -3,7 +3,7 @@ import { Component, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { AccountService } from '../services/account.service';
 import { ToastComponent } from '../toast/toast.component';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ModalComponent } from "../modal/modal.component";
 
 @Component({
@@ -14,7 +14,7 @@ import { ModalComponent } from "../modal/modal.component";
     imports: [RouterLink, FormsModule, ToastComponent, ModalComponent]
 })
 export class SignupComponent {
-
+  router = inject(Router);
   accountService = inject(AccountService);
   toastHeading = ""; 
   toastDescription = ""; 
@@ -27,15 +27,18 @@ export class SignupComponent {
         .subscribe({
           next: res => {
             console.log(res);
-
             this.generateToast("Success", "Account Created");
-            form.reset();
+            
           },
           error: err => {
             console.log(err);
 
             const error = err.error;
             this.generateToast(error['title'], error['detail'])
+          },
+          complete: () => {
+            form.reset();
+            this.router.navigate(["signin"])
           }
         });
     }
