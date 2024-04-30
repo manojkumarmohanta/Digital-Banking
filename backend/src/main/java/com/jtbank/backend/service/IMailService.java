@@ -18,4 +18,6 @@ public interface IMailService {
     void sendMoneyReceivedSuccessfulMessage(String name, String email, long accountNumber, long sender, double balance) throws UnsupportedEncodingException;
 
     void sendProfileUpdateSuccessfulMessage(String name, String email) throws UnsupportedEncodingException;
+
+    void sendLoanSuccessfulMessage(String name, String email) throws UnsupportedEncodingException;
 }

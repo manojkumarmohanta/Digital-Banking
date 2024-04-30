@@ -9,6 +9,7 @@ import com.jtbank.backend.repository.AccountRepository;
 import com.jtbank.backend.service.IAccountService;
 import com.jtbank.backend.service.IJWTService;
 import com.jtbank.backend.service.IMailService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/accounts")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "Authorization")
 public class AccountController {
     private final IAccountService accountService;
     private final IJWTService jwtService;
@@ -116,6 +118,17 @@ public class AccountController {
         return AccountMapper.dtoMapper(result);
     }
 
+    @PostMapping("/loanApplicationEmail")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createAccount(@RequestAttribute long accountNumber) throws UnsupportedEncodingException, MessagingException {
+        var accountDetails = accountService.getAccount(accountNumber);
+        //var loan = AccountMapper.modelMapper(dto);
+        //var result = loanService.loanApplicationForm(loan);
+        var name = accountDetails.getAccountHolderName();
+        var email = accountDetails.getCredential().getAccountEmail();
+        mailService.sendLoanSuccessfulMessage(name, email);
+        //return AccountMapper.dtoMapper(result);
+    }
 
     @PutMapping("/{accountNumber}")
     @ResponseStatus(HttpStatus.ACCEPTED)

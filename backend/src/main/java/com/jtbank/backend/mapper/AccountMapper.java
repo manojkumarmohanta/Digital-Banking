@@ -1,9 +1,6 @@
 package com.jtbank.backend.mapper;
 
-import com.jtbank.backend.dto.AccountAddressDTO;
-import com.jtbank.backend.dto.AccountRequestDTO;
-import com.jtbank.backend.dto.AccountResponseDTO;
-import com.jtbank.backend.dto.UpdateDTO;
+import com.jtbank.backend.dto.*;
 import com.jtbank.backend.model.Account;
 import com.jtbank.backend.model.Address;
 import com.jtbank.backend.model.Credential;
@@ -71,4 +68,6 @@ public class AccountMapper {
                 account.getStatus()
         );
     }
+
+
 }

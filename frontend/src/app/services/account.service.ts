@@ -5,6 +5,7 @@ import { environment } from '../../environments/environment.development';
 import { Otp } from '../model/otp';
 
 export const BASE_URL = environment.base_url + '/accounts';
+//export const LOAN_URL = environment.base_url + '/loans';
 
 @Injectable({
   providedIn: 'root'
@@ -40,8 +41,8 @@ export class AccountService {
     return this.http.patch(BASE_URL + "/transfer/" + reciever + "/balance/" + balance + "/password/" + password, {});
   }
 
-  loanApplication(loan: string) {
-    return this.http.post(BASE_URL + "/loanApplication", loan, {});
+  loanApplication() {
+    return this.http.post(BASE_URL + "/loanApplicationEmail", {});
   }
 
   getCurrentAccount() {

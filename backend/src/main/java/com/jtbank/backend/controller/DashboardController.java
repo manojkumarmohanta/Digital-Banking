@@ -4,6 +4,7 @@ import com.jtbank.backend.constant.TransactionMode;
 import com.jtbank.backend.dto.DashboardDTO;
 import com.jtbank.backend.mapper.TransactionMapper;
 import com.jtbank.backend.service.ITransactionService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +15,7 @@ import java.util.concurrent.ExecutionException;
 @RequestMapping("/api/v1/dashboards")
 @RequiredArgsConstructor
 @CrossOrigin
+@SecurityRequirement(name = "Authorization")
 public class DashboardController {
     private final ITransactionService transactionService;
 

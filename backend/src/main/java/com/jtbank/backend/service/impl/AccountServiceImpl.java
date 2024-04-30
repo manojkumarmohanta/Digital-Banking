@@ -148,10 +148,17 @@ public class AccountServiceImpl implements IAccountService {
             throw new RuntimeException("Insufficient balance");
         }
 
-        accountRepository.addBalance(receiver, balance);
+
         var account = getAccount(receiver);
         var name = account.getAccountHolderName();
         var email = account.getCredential().getAccountEmail();
+        //var accountNumber = account.getAccountNumber();
+        accountRepository.addBalance(receiver, balance);
+        var transactionReceiver = new Transaction();
+        transactionReceiver.setMode(TransactionMode.CREDIT);
+        transactionReceiver.setAmount(balance);
+
+        transactionService.addTransaction(transactionReceiver, receiver);
         mailService.sendMoneyReceivedSuccessfulMessage(name, email, receiver, sender, balance);
 
         accountRepository.deductBalance(sender, balance);

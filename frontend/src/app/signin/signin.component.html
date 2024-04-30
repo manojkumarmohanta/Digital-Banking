@@ -12,6 +12,7 @@
             <form method="post" #signinForm="ngForm" (ngSubmit)="onLogin(signinForm)">
                 <input type="text" placeholder="Email" name="accountEmail" required ngModel />
                 <input type="password" placeholder="Password" name="accountPassword" required ngModel />
+                <!-- <i class="fa fa-eye password-icon" id="togglePassword" aria-hidden="true"></i> -->
                 <input type="submit" value="Sign in" [disabled]="!signinForm.valid" [class.gray]="!signinForm.valid" />
             </form>
         </div>

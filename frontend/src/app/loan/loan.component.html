@@ -3,30 +3,30 @@
   <app-sidebar></app-sidebar>
   <section>
     <div class="form-container">
-      <form #loanForm="ngForm" (submit)="onLoanSubmit(loanForm)">
+      <form #loanForm="ngForm" (ngSubmit)="onLoanSubmit(loanForm)">
         <h1>Loan Application Form</h1>
         <hr />
         <h2>Personal Information:</h2>
         <div class="personal-details">
           <div class="form-group">
-            <label for="name">Full Name</label>
-            <input type="text" name="name" required />
+            <label for="fullName">First Name</label>
+            <input type="text" name="firstName" required />
           </div>
           <div class="form-group">
-            <label for="name">Email</label>
-            <input type="email" name="email" required />
+            <label for="lastname">Last Name</label>
+            <input type="text" name="lastName" required />
           </div>
           <div class="form-group">
-            <label for="name">Mobile number</label>
-            <input type="tel" name="contactNumber" pattern="[0-9]{10}" required />
+            <label for="panCardNumber">PAN Card Number</label>
+            <input type="tel" name="panCardNumber" required />
           </div>
           <div class="form-group">
-            <label for="name">Date of Birth</label>
+            <label for="dob">Date of Birth</label>
             <input type="date" name="dob" required />
           </div>
           <div>
             <div class="form-group">
-              <label>Gender:</label>
+              <label name="gender">Gender:</label>
               <select id="gender" name="gender" required>
                 <option value="">Select Your Gender</option>
                 <option value="male">Male</option>
@@ -36,8 +36,8 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="name">Marital Status</label>
-            <select id="marital_status" name="marital_status" required>
+            <label for="maritalStatus">Marital Status</label>
+            <select id="maritalStatus" name="maritalStatus" required>
               <option value="">Select Marital Status</option>
               <option value="single">Single</option>
               <option value="married">Married</option>
@@ -50,19 +50,19 @@
         <hr>
         <div class="address-details">
           <div class="form-group">
-            <label for="name">City</label>
+            <label for="city">City</label>
             <input type="text" name="city" required />
           </div>
           <div class="form-group">
-            <label for="name">State</label>
+            <label for="state">State</label>
             <input type="text" name="state" required />
           </div>
           <div class="form-group">
-            <label for="name">Country</label>
+            <label for="country">Country</label>
             <input type="text" name="country" required />
           </div>
           <div class="form-group">
-            <label for="name">Pin code</label>
+            <label for="zipcode">Pin code</label>
             <input type="text" name="zipcode" required />
           </div>
         </div>
@@ -70,8 +70,8 @@
         <hr>
         <div class="occupation-details">
           <div class="form-group">
-            <label for="name">Occupation</label>
-            <select id="occupation" name="ocupation" required>
+            <label for="occupation">Occupation</label>
+            <select id="occupation" name="occupation" required>
               <option value="">Select Occupation</option>
               <option value="personal">Salaried Employees</option>
               <option value="business">Self-Employed Professionals</option>
@@ -84,31 +84,31 @@
             </select>
           </div>
           <div class="form-group">
-            <label for="name">Employment Status</label>
-            <select name="employeestatus" id="employeestatus">
-              <option value="">Select Occupation</option>
+            <label for="employeeStatus">Employment Status</label>
+            <select name="employeeStatus" id="employeeStatus">
+              <option value="">Select Status</option>
               <option value="full">Full-time</option>
               <option value="part">Part-Time</option>
             </select>
           </div>
           <div class="form-group">
-            <label for="name">Employer/Self-Employed Name</label>
+            <label for="employer">Employer/Self-Employed Name</label>
             <input type="text" name="employer" required />
           </div>
           <div class="form-group">
-            <label for="name">Total Income</label>
-            <input type="number" name="income" required />
+            <label for="income">Total Income</label>
+            <input type="text" name="income" required />
           </div>
         </div>
         <h2>Loan:</h2>
         <hr>
         <div class="loan-details">
           <div class="form-group">
-            <label for="name">Loan Amount</label>
-            <input type="number" name="loanAmount" required />
+            <label for="loanAmount">Loan Amount</label>
+            <input type="text" name="loanAmount" required />
           </div>
           <div class="form-group">
-            <label for="name">Loan Tenor</label>
+            <label for="duration">Loan Tenor</label>
             <select id="duration" name="duration" required>
                 <option value="">Select Duration</option>
                 <option value="three">3 Months</option>
@@ -120,7 +120,7 @@
               </select>
           </div>
           <div class="form-group">
-            <label for="name">Loan Purpose</label>
+            <label for="purpose">Loan Purpose</label>
             <select id="purpose" name="purpose" required>
               <option value="">Select Purpose</option>
               <option value="personal">Personal</option>
@@ -130,7 +130,7 @@
             </select>
           </div>
           <div class="form-group">
-            <label for="name">Interest Rate Type</label>
+            <label for="interest">Interest Rate Type</label>
             <select id="interest" name="interest">
                 <option value="">Select Interest Type</option>
                 <option value="simple">Simple</option>

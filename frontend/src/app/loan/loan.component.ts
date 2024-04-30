@@ -25,13 +25,12 @@ export class LoanComponent {
 
   onLoanSubmit(form: NgForm) {
     if (form.valid) {
-      this.accountService.loanApplication(form.value).subscribe({
-        next: res => {
-          form.reset();
+      this.accountService.loanApplication().subscribe({
+        next: (res) => {
           this.generateToast('Success', 'Your Loan Application has been submitted successfully.');
           form.reset();
         },
-        error: err => {
+        error: (err) => {
           this.generateToast("Failure", "Cann't submit your loan application at the moment.");
         }
       })

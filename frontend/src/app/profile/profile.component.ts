@@ -55,7 +55,7 @@ export class ProfileComponent implements OnInit {
     this.accountService.uploadImage(this.file).subscribe({
       next: res => {
         this.account = res;
-        this.generateToast("Success", "Profile updated")
+        this.generateToast("Success", "Profile Picture updated")
         this.setImage()
       },
       error: err => {
@@ -77,7 +77,7 @@ export class ProfileComponent implements OnInit {
     this.accountService.updateAccount(this.account).subscribe({
       next: res => {
         this.account = res;
-        this.generateToast("Success", "Account updated")
+        this.generateToast("Success", "Profile Information updated")
       },
       error: err => {
         console.log(err);

@@ -1,5 +1,5 @@
 server:
-  port: 1221
+  port: 1222
   servlet:
     context-path: "/banking"
 

@@ -13,7 +13,7 @@
                 <input type="text" placeholder="Full name" name="accountHolderName" required ngModel />
                 <input type="email" placeholder="Email" name="accountEmail" required ngModel />
                 <input type="password" placeholder="Password" name="accountPassword" required ngModel />
-                <input type="text" placeholder="Mobile number" name="contactNumber" required ngModel />
+                <input type="text" placeholder="Mobile number" pattern="[0-9]{10}" name="contactNumber" required ngModel />
                 <select name="accountType" ngModel="CURRENT">
                     <option value="CURRENT">CURRENT</option>
                     <option value="SAVINGS">SAVINGS</option>
@@ -34,6 +34,7 @@
             <input type="text" placeholder="Enter the OTP..." class="w-100" name="otp" required ngModel/>
             <div class="button-group">
                 <button type="submit">Validate</button>
+                <button type="button" (click)="closeModal()">Cancel</button>
             </div>
         </form>
     </app-modal>

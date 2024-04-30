@@ -194,4 +194,29 @@ public class MailServiceImpl implements IMailService {
         message.setTo(email);
         javaMailSender.send(message);
     }
+
+    @Override
+    public void sendLoanSuccessfulMessage(String name, String email) throws UnsupportedEncodingException {
+        SimpleMailMessage message = new SimpleMailMessage();
+        InternetAddress from = new InternetAddress("digitalbanking.mcaproject@gmail.com", "Digital-Banking Team");
+        String subject = "Loan Application sent Successfully";
+        String body = "Dear, "+name+"\n" +
+                "\n" +
+                "We are pleased to inform you that your loan application form has been successfully submitted. " +
+                "Our team will now review your application and assess your eligibility for the requested loan amount.\n" +
+                "\n" +
+                "Please note that the processing time may vary depending on the complexity of your application. " +
+                "We will keep you updated on the status of your application via email.\n" +
+                "\n" +
+                "If you have any questions or need further assistance, please do not hesitate to contact our customer " +
+                "support team at " + sender +
+                "\n\n" +
+                "Thank you for choosing our services. We look forward to serving you.\nBest regards,\n"+
+                "Digital-Banking Team";
+        message.setFrom(String.valueOf(from));
+        message.setSubject(subject);
+        message.setText(body);
+        message.setTo(email);
+        javaMailSender.send(message);
+    }
 }
